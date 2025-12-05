@@ -36,37 +36,31 @@ export async function POST(request: NextRequest) {
 
     // Option 1: If using Google Sheets integration
     console.log('=== GOOGLE SHEETS INTEGRATION DEBUG ===');
-    console.log('Checking Sheets env vars...');
+    console.log('Attempting to submit to Google Sheets...');
     const hasRefreshToken = !!process.env.GOOGLE_REFRESH_TOKEN;
     const hasSheetId = !!process.env.GOOGLE_SHEET_ID;
     const hasClientId = !!process.env.GOOGLE_CLIENT_ID;
     const hasClientSecret = !!process.env.GOOGLE_CLIENT_SECRET;
-    const hasDriveFolderId = !!process.env.GOOGLE_DRIVE_FOLDER_ID;
 
     console.log('GOOGLE_REFRESH_TOKEN:', hasRefreshToken ? '***set***' : '***NOT SET***');
     console.log('GOOGLE_SHEET_ID:', hasSheetId ? '***set***' : '***NOT SET***');
     console.log('GOOGLE_CLIENT_ID:', hasClientId ? '***set***' : '***NOT SET***');
     console.log('GOOGLE_CLIENT_SECRET:', hasClientSecret ? '***set***' : '***NOT SET***');
-    console.log('GOOGLE_DRIVE_FOLDER_ID:', hasDriveFolderId ? '***set***' : '***NOT SET***');
 
-    console.log('All required vars present:', hasRefreshToken && hasSheetId && hasClientId && hasClientSecret);
-
-    if (process.env.GOOGLE_REFRESH_TOKEN && process.env.GOOGLE_SHEET_ID) {
-      console.log('✓ Submitting to Google Sheets...');
-      try {
-        await submitToGoogleSheets(assessmentData, data.insuranceCardImage);
-        console.log('✓ Google Sheets submission completed successfully');
-      } catch (error) {
-        console.error('✗ Google Sheets submission failed:', error);
-        // Return error instead of silently failing
-        return NextResponse.json(
-          { success: false, error: 'Google Sheets submission failed', details: error instanceof Error ? error.message : String(error) },
-          { status: 500 }
-        );
-      }
-    } else {
-      console.log('✗ Sheets env vars not set, skipping Sheets submission');
-      console.log('Debug: hasRefreshToken=', hasRefreshToken, 'hasSheetId=', hasSheetId);
+    // Always attempt to submit - don't skip if vars are missing, let it fail properly
+    try {
+      console.log('Calling submitToGoogleSheets function...');
+      await submitToGoogleSheets(assessmentData, data.insuranceCardImage);
+      console.log('✓ Google Sheets submission completed successfully');
+    } catch (error) {
+      console.error('✗ Google Sheets submission failed:', error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('Error details:', errorMessage);
+      // Return error instead of silently failing
+      return NextResponse.json(
+        { success: false, error: 'Google Sheets submission failed', details: errorMessage },
+        { status: 500 }
+      );
     }
     console.log('=== END DEBUG ===');
 
