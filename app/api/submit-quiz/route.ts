@@ -35,17 +35,29 @@ export async function POST(request: NextRequest) {
     };
 
     // Option 1: If using Google Sheets integration
+    console.log('=== GOOGLE SHEETS INTEGRATION DEBUG ===');
     console.log('Checking Sheets env vars...');
-    console.log('GOOGLE_REFRESH_TOKEN:', process.env.GOOGLE_REFRESH_TOKEN ? '***set***' : '***NOT SET***');
-    console.log('GOOGLE_SHEET_ID:', process.env.GOOGLE_SHEET_ID ? '***set***' : '***NOT SET***');
+    const hasRefreshToken = !!process.env.GOOGLE_REFRESH_TOKEN;
+    const hasSheetId = !!process.env.GOOGLE_SHEET_ID;
+    const hasClientId = !!process.env.GOOGLE_CLIENT_ID;
+    const hasClientSecret = !!process.env.GOOGLE_CLIENT_SECRET;
+    const hasDriveFolderId = !!process.env.GOOGLE_DRIVE_FOLDER_ID;
+
+    console.log('GOOGLE_REFRESH_TOKEN:', hasRefreshToken ? '***set***' : '***NOT SET***');
+    console.log('GOOGLE_SHEET_ID:', hasSheetId ? '***set***' : '***NOT SET***');
+    console.log('GOOGLE_CLIENT_ID:', hasClientId ? '***set***' : '***NOT SET***');
+    console.log('GOOGLE_CLIENT_SECRET:', hasClientSecret ? '***set***' : '***NOT SET***');
+    console.log('GOOGLE_DRIVE_FOLDER_ID:', hasDriveFolderId ? '***set***' : '***NOT SET***');
+
+    console.log('All required vars present:', hasRefreshToken && hasSheetId && hasClientId && hasClientSecret);
 
     if (process.env.GOOGLE_REFRESH_TOKEN && process.env.GOOGLE_SHEET_ID) {
-      console.log('Submitting to Google Sheets...');
+      console.log('✓ Submitting to Google Sheets...');
       try {
         await submitToGoogleSheets(assessmentData, data.insuranceCardImage);
-        console.log('Google Sheets submission completed successfully');
+        console.log('✓ Google Sheets submission completed successfully');
       } catch (error) {
-        console.error('Google Sheets submission failed:', error);
+        console.error('✗ Google Sheets submission failed:', error);
         // Return error instead of silently failing
         return NextResponse.json(
           { success: false, error: 'Google Sheets submission failed', details: error instanceof Error ? error.message : String(error) },
@@ -53,8 +65,10 @@ export async function POST(request: NextRequest) {
         );
       }
     } else {
-      console.log('Sheets env vars not set, skipping Sheets submission');
+      console.log('✗ Sheets env vars not set, skipping Sheets submission');
+      console.log('Debug: hasRefreshToken=', hasRefreshToken, 'hasSheetId=', hasSheetId);
     }
+    console.log('=== END DEBUG ===');
 
     // Option 2: If using email integration (basic fallback)
     if (process.env.QUIZ_EMAIL) {
