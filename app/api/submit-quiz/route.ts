@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Environment variables configured in Vercel dashboard
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
