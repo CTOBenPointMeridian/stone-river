@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
+    console.log('[QUIZ API] Request received at', new Date().toISOString());
+    console.log('[QUIZ API] Data keys:', Object.keys(data));
 
     // Validate required fields
     if (!data.fullName || !data.phone || !data.email) {
