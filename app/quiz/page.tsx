@@ -207,15 +207,22 @@ export default function QuizPage() {
         body: JSON.stringify(answers),
       });
 
+      const data = await response.json();
+      console.log('API Response:', response.status, data);
+
       if (response.ok) {
         // Redirect to home page after 2 seconds
         setTimeout(() => {
           router.push('/');
         }, 2000);
         setCurrentStep(steps.length);
+      } else {
+        console.error('API returned error:', data);
+        alert(`Error: ${data.error || 'Failed to submit quiz'}`);
       }
     } catch (error) {
       console.error('Error submitting quiz:', error);
+      alert('Error submitting quiz. Please try again.');
     }
   };
 
