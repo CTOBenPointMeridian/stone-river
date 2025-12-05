@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const housingImages = [
   { id: 1, src: "/housing-1.webp", alt: "Housing Option 1" },
@@ -51,14 +52,16 @@ export function Housing() {
           <p className="text-lg text-gray-600 leading-relaxed mb-8">
             We work with vetted and trusted recovery residences throughout our service areas and provide transportation to and from our facilities. To learn more about our supportive housing options, contact us today.
           </p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="btn-primary inline-flex items-center gap-2 justify-center"
-          >
-            Contact Us Today
-            <ArrowRight className="w-5 h-5" />
-          </motion.button>
+          <Link href="/quiz">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="btn-primary inline-flex items-center gap-2 justify-center"
+            >
+              Contact Us Today
+              <ArrowRight className="w-5 h-5" />
+            </motion.button>
+          </Link>
         </motion.div>
 
         {/* Image Gallery */}
