@@ -38,7 +38,12 @@ export async function POST(request: NextRequest) {
       try {
         await submitToGoogleSheets(assessmentData, data.insuranceCardImage);
       } catch (error) {
-        console.error('Google Sheets submission failed, but continuing with console log:', error);
+        console.error('Google Sheets submission failed:', error);
+        // Return error instead of silently failing
+        return NextResponse.json(
+          { success: false, error: 'Google Sheets submission failed', details: error instanceof Error ? error.message : String(error) },
+          { status: 500 }
+        );
       }
     }
 
@@ -197,8 +202,7 @@ async function submitToGoogleSheets(
       console.error('Status code:', sheetsResponse.status);
       console.error('Sheet ID being used:', spreadsheetId);
       console.error('Sheet name being used:', sheetName);
-      // Don't throw - fall back to console logging
-      console.log('Note: Google Sheets failed. Data logged to console above.');
+      throw new Error(`Google Sheets API error: ${sheetsResponse.status} - ${sheetsText}`);
     } else {
       console.log('Successfully appended to Google Sheets');
     }
