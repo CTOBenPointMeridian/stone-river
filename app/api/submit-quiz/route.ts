@@ -181,15 +181,19 @@ async function submitToGoogleSheets(
     console.log('Sending to Sheets URL:', sheetsUrl);
     console.log('Row data to append:', JSON.stringify(row));
 
+    const requestBody = JSON.stringify({
+      values: [row],
+    });
+    console.log('Request body:', requestBody);
+    console.log('Request body length:', requestBody.length);
+
     const sheetsResponse = await fetch(sheetsUrl, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        values: [row],
-      }),
+      body: requestBody,
     });
 
     console.log('Google Sheets response status:', sheetsResponse.status);
