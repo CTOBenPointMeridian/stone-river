@@ -8,7 +8,6 @@ import { ChevronRight } from 'lucide-react';
 export default function QuizPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [answers, setAnswers] = useState<Record<string, any>>({
     seekingHelpFor: '',
     primaryCondition: '',
@@ -199,7 +198,6 @@ export default function QuizPage() {
   };
 
   const handleSubmit = async () => {
-    setIsSubmitting(true);
     try {
       const response = await fetch('/api/submit-quiz', {
         method: 'POST',
@@ -218,8 +216,6 @@ export default function QuizPage() {
       }
     } catch (error) {
       console.error('Error submitting quiz:', error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
