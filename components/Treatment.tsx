@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface TreatmentCard {
   title: string;
@@ -56,6 +56,12 @@ const itemVariants = {
 };
 
 export function Treatment() {
+  const router = useRouter();
+
+  const handleNavigateToQuiz = () => {
+    router.push('/quiz');
+  };
+
   return (
     <section id="treatment" className="py-20 bg-white">
       <div className="container-custom">
@@ -83,16 +89,15 @@ export function Treatment() {
             At Stone River Behavioral Health, we understand the complexities of mental health challenges and are here to support you every step of the way. Our expert mental health treatment options are designed to meet the unique needs of each individual, ensuring comprehensive care that focuses not only on symptom relief but also on long-term emotional and psychological well-being.
           </p>
 
-          <Link href="/quiz">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-primary inline-flex items-center gap-2 justify-center"
-            >
-              Speak to Admissions
-              <ArrowRight className="w-5 h-5" />
-            </motion.button>
-          </Link>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleNavigateToQuiz}
+            className="btn-primary inline-flex items-center gap-2 justify-center"
+          >
+            Speak to Admissions
+            <ArrowRight className="w-5 h-5" />
+          </motion.button>
         </motion.div>
 
         {/* Mental Health Info Section */}
