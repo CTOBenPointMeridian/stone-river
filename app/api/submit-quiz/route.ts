@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     };
 
     // Option 1: If using Google Sheets integration
-    console.log('=== GOOGLE SHEETS INTEGRATION DEBUG ===');
+    console.log('=== GOOGLE SHEETS INTEGRATION DEBUG === [FRESH BUILD]');
     console.log('Attempting to submit to Google Sheets...');
     const hasRefreshToken = !!process.env.GOOGLE_REFRESH_TOKEN;
     const hasSheetId = !!process.env.GOOGLE_SHEET_ID;
