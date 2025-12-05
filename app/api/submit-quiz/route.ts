@@ -76,7 +76,16 @@ export async function POST(request: NextRequest) {
     // Option 3: Always log to console (development backup)
     console.log('Quiz submission received and logged:', assessmentData);
     return NextResponse.json(
-      { success: true, message: 'Assessment saved successfully' },
+      {
+        success: true,
+        message: 'Assessment saved successfully',
+        debug: {
+          hasRefreshToken: !!process.env.GOOGLE_REFRESH_TOKEN,
+          hasSheetId: !!process.env.GOOGLE_SHEET_ID,
+          hasClientId: !!process.env.GOOGLE_CLIENT_ID,
+          hasClientSecret: !!process.env.GOOGLE_CLIENT_SECRET,
+        }
+      },
       { status: 200 }
     );
 
