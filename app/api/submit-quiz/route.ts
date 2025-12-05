@@ -138,27 +138,30 @@ async function submitToGoogleSheets(
       console.log('No image or Drive folder ID provided. Image provided:', !!insuranceCardImage, 'Folder ID:', !!process.env.GOOGLE_DRIVE_FOLDER_ID);
     }
 
-    // Prepare row for Google Sheets
+    // Prepare row for Google Sheets - convert undefined/null to empty strings
     const row = [
-      assessmentData.timestamp,
-      assessmentData.seekingHelpFor,
-      assessmentData.primaryCondition,
-      assessmentData.duration,
-      assessmentData.severity,
-      assessmentData.previousTreatment,
-      assessmentData.mentalHealthConcerns,
-      assessmentData.insuranceType,
-      assessmentData.insuranceProvider,
+      assessmentData.timestamp || '',
+      assessmentData.seekingHelpFor || '',
+      assessmentData.primaryCondition || '',
+      assessmentData.duration || '',
+      assessmentData.severity || '',
+      assessmentData.previousTreatment || '',
+      assessmentData.mentalHealthConcerns || '',
+      assessmentData.insuranceType || '',
+      assessmentData.insuranceProvider || '',
       insuranceCardLink || 'No image',
-      assessmentData.insuranceReceivedHow,
-      assessmentData.recoveryReadiness,
-      assessmentData.dateOfBirth,
-      assessmentData.timeframe,
-      assessmentData.fullName,
-      assessmentData.phone,
-      assessmentData.email,
-      assessmentData.consentToContact,
+      assessmentData.insuranceReceivedHow || '',
+      assessmentData.recoveryReadiness || '',
+      assessmentData.dateOfBirth || '',
+      assessmentData.timeframe || '',
+      assessmentData.fullName || '',
+      assessmentData.phone || '',
+      assessmentData.email || '',
+      assessmentData.consentToContact || '',
     ];
+
+    console.log('Prepared row with', row.length, 'fields');
+    console.log('Row fields:', row.map((f, i) => `${i}:${typeof f}:${f ? 'filled' : 'empty'}`).join(', '));
 
     // Append to Google Sheets
     const spreadsheetId = process.env.GOOGLE_SHEET_ID;
@@ -199,7 +202,18 @@ async function submitToGoogleSheets(
       console.error('Sheet ID being used:', spreadsheetId);
       console.error('Sheet name being used:', sheetName);
       throw new Error(`Google Sheets API error: ${sheetsResponse.status} - ${sheetsText}`);
-    } else {
+    }
+
+    // Check if response contains error info even if status is 200
+    try {
+      const responseJson = JSON.parse(sheetsText);
+      if (responseJson.error) {
+        console.error('Google Sheets error in response body:', responseJson.error);
+        throw new Error(`Google Sheets error: ${JSON.stringify(responseJson.error)}`);
+      }
+      console.log('Successfully appended to Google Sheets. Response:', responseJson);
+    } catch (parseError) {
+      // If not JSON, that's ok - Sheets append responses are usually not JSON
       console.log('Successfully appended to Google Sheets');
     }
 
