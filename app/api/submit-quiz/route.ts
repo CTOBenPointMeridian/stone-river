@@ -81,7 +81,9 @@ export async function POST(request: NextRequest) {
     const responseData = {
       success: true,
       message: 'Assessment saved successfully',
-      debug: {
+      timestamp: new Date().toISOString(),
+      deployed: 'c878d8f',
+      envVars: {
         refreshToken: process.env.GOOGLE_REFRESH_TOKEN ? 'SET' : 'NOT SET',
         sheetId: process.env.GOOGLE_SHEET_ID ? 'SET' : 'NOT SET',
         clientId: process.env.GOOGLE_CLIENT_ID ? 'SET' : 'NOT SET',
