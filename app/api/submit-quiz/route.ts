@@ -149,38 +149,17 @@ async function submitToGoogleSheets(
     console.log('Spreadsheet ID:', spreadsheetId);
     console.log('Access token:', accessToken ? 'present' : 'missing');
 
-    // First, get the spreadsheet metadata to find the actual sheet name
-    let sheetName = 'Sheet1'; // default fallback
-    try {
-      const metadataResponse = await fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      console.log('Metadata fetch status:', metadataResponse.status);
-      if (metadataResponse.ok) {
-        const metadata = await metadataResponse.json();
-        if (metadata.sheets && metadata.sheets.length > 0) {
-          sheetName = metadata.sheets[0].properties.title;
-          console.log('Found sheet name:', sheetName);
-        }
-      } else {
-        const metadataErrorText = await metadataResponse.text();
-        console.error('Metadata fetch failed:', metadataErrorText);
-      }
-    } catch (error) {
-      console.error('Failed to fetch sheet metadata, using default:', error);
-    }
+    // Use 'leads' sheet - this is the standard name
+    const sheetName = 'leads';
 
     // Use the values:append endpoint
     // For sheets with spaces in the name, they need to be quoted
     const encodedSheetName = sheetName.includes(' ') ? `'${sheetName}'` : sheetName;
     const sheetsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodedSheetName}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`;
     console.log('Request URL:', sheetsUrl);
+
+    console.log('Sending to Sheets URL:', sheetsUrl);
+    console.log('Row data to append:', JSON.stringify(row));
 
     const sheetsResponse = await fetch(sheetsUrl, {
       method: 'POST',
