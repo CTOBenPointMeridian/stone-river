@@ -4,8 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    console.log('[QUIZ API] Request received at', new Date().toISOString());
-    console.log('[QUIZ API] Data keys:', Object.keys(data));
+    console.log('[SUBMIT-QUIZ] Received data:', JSON.stringify(data, null, 2));
 
     // Validate required fields
     if (!data.fullName || !data.phone || !data.email) {
@@ -77,16 +76,10 @@ export async function POST(request: NextRequest) {
 
     // Option 3: Always log to console (development backup)
     console.log('Quiz submission received and logged:', assessmentData);
-
-    return NextResponse.json({
-      test: 'THIS IS A TEST RESPONSE',
-      timestamp: new Date().toISOString(),
-      commitHash: '5e9d540-TEST',
-      env: {
-        hasRefresh: !!process.env.GOOGLE_REFRESH_TOKEN,
-        hasSheet: !!process.env.GOOGLE_SHEET_ID,
-      }
-    }, { status: 200 });
+    return NextResponse.json(
+      { success: true, message: 'Assessment saved successfully' },
+      { status: 200 }
+    );
 
   } catch (error) {
     console.error('Error processing quiz submission:', error);
@@ -146,30 +139,27 @@ async function submitToGoogleSheets(
       console.log('No image or Drive folder ID provided. Image provided:', !!insuranceCardImage, 'Folder ID:', !!process.env.GOOGLE_DRIVE_FOLDER_ID);
     }
 
-    // Prepare row for Google Sheets - convert undefined/null to empty strings
+    // Prepare row for Google Sheets
     const row = [
-      assessmentData.timestamp || '',
-      assessmentData.seekingHelpFor || '',
-      assessmentData.primaryCondition || '',
-      assessmentData.duration || '',
-      assessmentData.severity || '',
-      assessmentData.previousTreatment || '',
-      assessmentData.mentalHealthConcerns || '',
-      assessmentData.insuranceType || '',
-      assessmentData.insuranceProvider || '',
+      assessmentData.timestamp,
+      assessmentData.seekingHelpFor,
+      assessmentData.primaryCondition,
+      assessmentData.duration,
+      assessmentData.severity,
+      assessmentData.previousTreatment,
+      assessmentData.mentalHealthConcerns,
+      assessmentData.insuranceType,
+      assessmentData.insuranceProvider,
       insuranceCardLink || 'No image',
-      assessmentData.insuranceReceivedHow || '',
-      assessmentData.recoveryReadiness || '',
-      assessmentData.dateOfBirth || '',
-      assessmentData.timeframe || '',
-      assessmentData.fullName || '',
-      assessmentData.phone || '',
-      assessmentData.email || '',
-      assessmentData.consentToContact || '',
+      assessmentData.insuranceReceivedHow,
+      assessmentData.recoveryReadiness,
+      assessmentData.dateOfBirth,
+      assessmentData.timeframe,
+      assessmentData.fullName,
+      assessmentData.phone,
+      assessmentData.email,
+      assessmentData.consentToContact,
     ];
-
-    console.log('Prepared row with', row.length, 'fields');
-    console.log('Row fields:', row.map((f, i) => `${i}:${typeof f}:${f ? 'filled' : 'empty'}`).join(', '));
 
     // Append to Google Sheets
     const spreadsheetId = process.env.GOOGLE_SHEET_ID;
@@ -189,19 +179,15 @@ async function submitToGoogleSheets(
     console.log('Sending to Sheets URL:', sheetsUrl);
     console.log('Row data to append:', JSON.stringify(row));
 
-    const requestBody = JSON.stringify({
-      values: [row],
-    });
-    console.log('Request body:', requestBody);
-    console.log('Request body length:', requestBody.length);
-
     const sheetsResponse = await fetch(sheetsUrl, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
-      body: requestBody,
+      body: JSON.stringify({
+        values: [row],
+      }),
     });
 
     console.log('Google Sheets response status:', sheetsResponse.status);
@@ -214,18 +200,7 @@ async function submitToGoogleSheets(
       console.error('Sheet ID being used:', spreadsheetId);
       console.error('Sheet name being used:', sheetName);
       throw new Error(`Google Sheets API error: ${sheetsResponse.status} - ${sheetsText}`);
-    }
-
-    // Check if response contains error info even if status is 200
-    try {
-      const responseJson = JSON.parse(sheetsText);
-      if (responseJson.error) {
-        console.error('Google Sheets error in response body:', responseJson.error);
-        throw new Error(`Google Sheets error: ${JSON.stringify(responseJson.error)}`);
-      }
-      console.log('Successfully appended to Google Sheets. Response:', responseJson);
-    } catch (parseError) {
-      // If not JSON, that's ok - Sheets append responses are usually not JSON
+    } else {
       console.log('Successfully appended to Google Sheets');
     }
 
