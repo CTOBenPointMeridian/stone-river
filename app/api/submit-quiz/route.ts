@@ -34,9 +34,15 @@ export async function POST(request: NextRequest) {
     };
 
     // Option 1: If using Google Sheets integration
+    console.log('Checking Sheets env vars...');
+    console.log('GOOGLE_REFRESH_TOKEN:', process.env.GOOGLE_REFRESH_TOKEN ? '***set***' : '***NOT SET***');
+    console.log('GOOGLE_SHEET_ID:', process.env.GOOGLE_SHEET_ID ? '***set***' : '***NOT SET***');
+
     if (process.env.GOOGLE_REFRESH_TOKEN && process.env.GOOGLE_SHEET_ID) {
+      console.log('Submitting to Google Sheets...');
       try {
         await submitToGoogleSheets(assessmentData, data.insuranceCardImage);
+        console.log('Google Sheets submission completed successfully');
       } catch (error) {
         console.error('Google Sheets submission failed:', error);
         // Return error instead of silently failing
@@ -45,6 +51,8 @@ export async function POST(request: NextRequest) {
           { status: 500 }
         );
       }
+    } else {
+      console.log('Sheets env vars not set, skipping Sheets submission');
     }
 
     // Option 2: If using email integration (basic fallback)
