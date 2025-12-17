@@ -17,7 +17,8 @@ export function Header() {
 
   return (
     <header className="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-gray-100">
-      <nav className="px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center h-auto md:h-32 gap-4 md:gap-0 py-4 md:py-0">
+      <nav className="px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16 sm:h-20 md:h-32">
+        {/* Logo */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -29,7 +30,7 @@ export function Header() {
             alt="Stone River Logo"
             width={540}
             height={180}
-            className="h-auto"
+            className="h-10 sm:h-14 md:h-auto w-auto max-w-[200px] sm:max-w-[280px] md:max-w-none"
             priority
           />
         </motion.div>
@@ -81,17 +82,24 @@ export function Header() {
           exit={{ opacity: 0, y: -20 }}
           className="md:hidden border-t border-gray-100 bg-white"
         >
-          <div className="container-custom py-4 flex flex-col gap-4">
+          <div className="px-4 py-4 flex flex-col gap-3">
             {navItems.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
+                className="text-gray-700 hover:text-amber-700 transition-colors font-medium py-2"
                 onClick={() => setIsOpen(false)}
               >
                 {item.name}
               </a>
             ))}
+            <a
+              href="/quiz"
+              className="mt-2 px-6 py-3 bg-amber-700 text-white font-medium rounded-full hover:bg-amber-800 transition-colors text-center"
+              onClick={() => setIsOpen(false)}
+            >
+              Get Started
+            </a>
           </div>
         </motion.div>
       )}
