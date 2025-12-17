@@ -8,6 +8,7 @@ import { ChevronRight } from 'lucide-react';
 export default function QuizPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [answers, setAnswers] = useState<Record<string, any>>({
     seekingHelpFor: '',
     primaryCondition: '',
@@ -198,6 +199,10 @@ export default function QuizPage() {
   };
 
   const handleSubmit = async () => {
+    // Prevent multiple submissions
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     try {
       const response = await fetch('/api/submit-quiz', {
         method: 'POST',
@@ -219,10 +224,12 @@ export default function QuizPage() {
       } else {
         console.error('API returned error:', data);
         alert(`Error: ${data.error || 'Failed to submit quiz'}`);
+        setIsSubmitting(false);
       }
     } catch (error) {
       console.error('Error submitting quiz:', error);
       alert('Error submitting quiz. Please try again.');
+      setIsSubmitting(false);
     }
   };
 
@@ -451,11 +458,12 @@ export default function QuizPage() {
                     </span>
                   </label>
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
+                    whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                     onClick={handleNext}
-                    className="w-full px-8 py-4 bg-amber-700 text-white text-lg font-semibold rounded-xl hover:bg-amber-800 transition flex items-center justify-center gap-2"
+                    disabled={isSubmitting}
+                    className="w-full px-8 py-4 bg-amber-700 text-white text-lg font-semibold rounded-xl hover:bg-amber-800 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
                   >
-                    Submit <ChevronRight className="w-5 h-5" />
+                    {isSubmitting ? 'Submitting...' : 'Submit'} {!isSubmitting && <ChevronRight className="w-5 h-5" />}
                   </motion.button>
                 </div>
               )}
