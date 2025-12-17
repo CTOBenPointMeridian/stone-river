@@ -237,8 +237,8 @@ export default function QuizPage() {
   const progressPercentage = ((currentStep) / (steps.length - 1)) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-50 py-16 md:py-24 flex flex-col pt-40">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-50 py-8 md:py-24 flex flex-col pt-24 md:pt-40">
+      <div className="max-w-3xl mx-auto px-3 sm:px-6 lg:px-8 w-full flex-1 flex flex-col">
         {/* Progress Bar */}
         {currentStep > 0 && currentStep < steps.length && (
           <motion.div
@@ -273,15 +273,15 @@ export default function QuizPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              className="bg-white rounded-2xl shadow-xl p-8 md:p-16"
+              className="bg-white rounded-2xl shadow-xl p-5 sm:p-8 md:p-16"
             >
               {/* Intro Screen */}
               {step.type === 'intro' && (
                 <div className="text-center">
-                  <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+                  <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
                     {step.headline}
                   </h1>
-                  <p className="text-xl md:text-2xl text-gray-600 mb-12 leading-relaxed">
+                  <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-8 sm:mb-12 leading-relaxed">
                     {step.subheadline}
                   </p>
                   <motion.button
@@ -298,16 +298,16 @@ export default function QuizPage() {
               {/* Single Choice Questions */}
               {step.type === 'single-choice' && (
                 <div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-10">
+                  <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-10">
                     {step.question}
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-10">
                     {step.options?.map((option) => (
                       <motion.button
                         key={option}
                         whileHover={{ scale: 1.02 }}
                         onClick={() => handleAnswer(step.key || '', option)}
-                        className={`p-4 rounded-xl border-2 font-semibold text-lg transition ${
+                        className={`p-3 sm:p-4 rounded-xl border-2 font-semibold text-base sm:text-lg transition ${
                           answers[step.key || ''] === option
                             ? 'border-amber-700 bg-amber-50 text-amber-700'
                             : 'border-gray-300 bg-white text-gray-900 hover:border-amber-400'
@@ -321,7 +321,7 @@ export default function QuizPage() {
                     whileHover={{ scale: 1.02 }}
                     onClick={handleNext}
                     disabled={!answers[step.key || '']}
-                    className="w-full px-8 py-4 bg-amber-700 text-white text-lg font-semibold rounded-xl hover:bg-amber-800 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
+                    className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-amber-700 text-white text-base sm:text-lg font-semibold rounded-xl hover:bg-amber-800 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
                   >
                     Continue <ChevronRight className="w-5 h-5" />
                   </motion.button>
@@ -331,16 +331,16 @@ export default function QuizPage() {
               {/* Multi-Choice Questions */}
               {step.type === 'multi-choice' && (
                 <div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-10">
+                  <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-10">
                     {step.question}
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-10">
                     {step.options?.map((option) => (
                       <motion.button
                         key={option}
                         whileHover={{ scale: 1.02 }}
                         onClick={() => handleAnswer(step.key || '', option)}
-                        className={`p-4 rounded-xl border-2 font-semibold text-lg transition ${
+                        className={`p-3 sm:p-4 rounded-xl border-2 font-semibold text-base sm:text-lg transition ${
                           (answers[step.key || ''] || []).includes(option)
                             ? 'border-amber-700 bg-amber-50 text-amber-700'
                             : 'border-gray-300 bg-white text-gray-900 hover:border-amber-400'
@@ -353,7 +353,7 @@ export default function QuizPage() {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     onClick={handleNext}
-                    className="w-full px-8 py-4 bg-amber-700 text-white text-lg font-semibold rounded-xl hover:bg-amber-800 transition flex items-center justify-center gap-2"
+                    className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-amber-700 text-white text-base sm:text-lg font-semibold rounded-xl hover:bg-amber-800 transition flex items-center justify-center gap-2"
                   >
                     Continue <ChevronRight className="w-5 h-5" />
                   </motion.button>
@@ -363,7 +363,7 @@ export default function QuizPage() {
               {/* Text Input */}
               {step.type === 'text-input' && (
                 <div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-10">
+                  <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-10">
                     {step.question}
                   </h2>
                   <input
@@ -371,13 +371,13 @@ export default function QuizPage() {
                     placeholder={step.placeholder}
                     value={answers[step.key || ''] || ''}
                     onChange={(e) => handleAnswer(step.key || '', e.target.value)}
-                    className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl mb-10 text-lg text-gray-900 focus:border-amber-700 focus:outline-none placeholder:text-gray-500"
+                    className="w-full px-4 sm:px-5 py-3 sm:py-4 border-2 border-gray-300 rounded-xl mb-6 sm:mb-10 text-base sm:text-lg text-gray-900 focus:border-amber-700 focus:outline-none placeholder:text-gray-500"
                   />
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     onClick={handleNext}
                     disabled={!answers[step.key || '']}
-                    className="w-full px-8 py-4 bg-amber-700 text-white text-lg font-semibold rounded-xl hover:bg-amber-800 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
+                    className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-amber-700 text-white text-base sm:text-lg font-semibold rounded-xl hover:bg-amber-800 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
                   >
                     Continue <ChevronRight className="w-5 h-5" />
                   </motion.button>
@@ -387,17 +387,17 @@ export default function QuizPage() {
               {/* File Upload */}
               {step.type === 'file-upload' && (
                 <div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-10">
+                  <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-10">
                     {step.question}
                   </h2>
-                  <div className="mb-10">
-                    <label className="flex flex-col items-center justify-center w-full px-6 py-10 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-amber-700 hover:bg-amber-50 transition">
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <svg className="w-12 h-12 mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="mb-6 sm:mb-10">
+                    <label className="flex flex-col items-center justify-center w-full px-4 sm:px-6 py-8 sm:py-10 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-amber-700 hover:bg-amber-50 transition">
+                      <div className="flex flex-col items-center justify-center pt-3 sm:pt-5 pb-4 sm:pb-6">
+                        <svg className="w-10 h-10 sm:w-12 sm:h-12 mb-3 sm:mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                         </svg>
-                        <p className="mb-2 text-lg font-semibold text-gray-900">Upload Insurance Card</p>
-                        <p className="text-sm text-gray-600">Click to upload or take a photo</p>
+                        <p className="mb-2 text-base sm:text-lg font-semibold text-gray-900">Upload Insurance Card</p>
+                        <p className="text-xs sm:text-sm text-gray-600">Click to upload or take a photo</p>
                         {answers[step.key || ''] && (
                           <p className="mt-3 text-sm font-semibold text-amber-700">✓ Image uploaded</p>
                         )}
@@ -413,7 +413,7 @@ export default function QuizPage() {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     onClick={handleNext}
-                    className="w-full px-8 py-4 bg-amber-700 text-white text-lg font-semibold rounded-xl hover:bg-amber-800 transition flex items-center justify-center gap-2"
+                    className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-amber-700 text-white text-base sm:text-lg font-semibold rounded-xl hover:bg-amber-800 transition flex items-center justify-center gap-2"
                   >
                     Continue <ChevronRight className="w-5 h-5" />
                   </motion.button>
@@ -423,20 +423,20 @@ export default function QuizPage() {
               {/* Date Input */}
               {step.type === 'date-input' && (
                 <div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-10">
+                  <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-900 mb-6 sm:mb-10">
                     {step.question}
                   </h2>
                   <input
                     type="date"
                     value={answers[step.key || ''] || ''}
                     onChange={(e) => handleAnswer(step.key || '', e.target.value)}
-                    className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl mb-10 text-lg text-gray-900 focus:border-amber-700 focus:outline-none"
+                    className="w-full px-4 sm:px-5 py-3 sm:py-4 border-2 border-gray-300 rounded-xl mb-6 sm:mb-10 text-base sm:text-lg text-gray-900 focus:border-amber-700 focus:outline-none"
                   />
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     onClick={handleNext}
                     disabled={!answers[step.key || '']}
-                    className="w-full px-8 py-4 bg-amber-700 text-white text-lg font-semibold rounded-xl hover:bg-amber-800 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
+                    className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-amber-700 text-white text-base sm:text-lg font-semibold rounded-xl hover:bg-amber-800 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
                   >
                     Continue <ChevronRight className="w-5 h-5" />
                   </motion.button>
@@ -446,14 +446,14 @@ export default function QuizPage() {
               {/* Checkbox */}
               {step.type === 'checkbox' && (
                 <div>
-                  <label className="flex items-center cursor-pointer mb-10">
+                  <label className="flex items-start cursor-pointer mb-6 sm:mb-10">
                     <input
                       type="checkbox"
                       checked={answers[step.key || ''] || false}
                       onChange={(e) => handleAnswer(step.key || '', e.target.checked)}
-                      className="w-5 h-5 rounded border-gray-300 text-amber-700 focus:ring-amber-700"
+                      className="w-5 h-5 mt-1 rounded border-gray-300 text-amber-700 focus:ring-amber-700 flex-shrink-0"
                     />
-                    <span className="ml-3 text-xl text-gray-900 font-semibold">
+                    <span className="ml-3 text-base sm:text-xl text-gray-900 font-semibold">
                       {step.question}
                     </span>
                   </label>
@@ -461,7 +461,7 @@ export default function QuizPage() {
                     whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                     onClick={handleNext}
                     disabled={isSubmitting}
-                    className="w-full px-8 py-4 bg-amber-700 text-white text-lg font-semibold rounded-xl hover:bg-amber-800 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
+                    className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-amber-700 text-white text-base sm:text-lg font-semibold rounded-xl hover:bg-amber-800 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? 'Submitting...' : 'Submit'} {!isSubmitting && <ChevronRight className="w-5 h-5" />}
                   </motion.button>
@@ -483,17 +483,17 @@ export default function QuizPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-2xl shadow-xl p-8 md:p-16 text-center"
+              className="bg-white rounded-2xl shadow-xl p-5 sm:p-8 md:p-16 text-center"
             >
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+              <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
                 Thank You!
               </h1>
-              <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-6 sm:mb-8 leading-relaxed">
                 Thank you for completing the assessment. Our team will review your responses and reach out to you shortly.
               </p>
               <a
                 href="tel:+1-844-524-8553"
-                className="inline-block px-10 py-4 bg-amber-700 text-white text-lg font-semibold rounded-xl hover:bg-amber-800 transition"
+                className="inline-block px-8 sm:px-10 py-3 sm:py-4 bg-amber-700 text-white text-base sm:text-lg font-semibold rounded-xl hover:bg-amber-800 transition"
               >
                 Call Now: (844) 524-8553
               </a>
