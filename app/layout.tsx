@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { GoogleTagManager } from "@/components/GoogleTagManager";
 
 export const metadata: Metadata = {
   title: "Stone River",
@@ -16,6 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <GoogleTagManager />
+      </head>
       <body className="antialiased">
         {children}
       </body>
